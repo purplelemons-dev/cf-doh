@@ -1,5 +1,5 @@
 import { type RequestHandler } from "@sveltejs/kit";
-import { Query, handleQuery } from "$lib";
+import { base64UrlDecode, handleQuery, Query } from "$lib";
 
 export const GET: RequestHandler = async (request) => {
     const dnsQuery = request.url.searchParams.get("dns");
@@ -7,20 +7,19 @@ export const GET: RequestHandler = async (request) => {
         return new Response("Missing 'dns' query parameter", { status: 400 });
     }
 
-    const thisQuery = new Query(dnsQuery);
+    const decoded = base64UrlDecode(dnsQuery);
 
-    const response = await handleQuery(thisQuery);
-    return new Response();
+    const response = await handleQuery(new Query(decoded), request);
+    return response;
 };
 
 export const POST: RequestHandler = async (request) => {
-    const dnsQuery = await request.request.text();
+    // POST requests will have a binary body
+    const dnsQuery = new Uint8Array(await request.request.arrayBuffer());
     if (!dnsQuery) {
-        return new Response("Missing 'dns' body", { status: 400 });
+        return new Response("Missing 'dns-message' body", { status: 400 });
     }
 
-    const thisQuery = new Query(dnsQuery);
-
-    const response = await handleQuery(thisQuery);
-    return new Response();
+    const response = await handleQuery(new Query(dnsQuery), request);
+    return response;
 };

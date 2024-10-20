@@ -1,4 +1,4 @@
-# CF-DOH
+# CF-DoH
 
 cloudflare deployment of my own custom DNS over HTTP(s) server.
 
@@ -9,3 +9,8 @@ cloudflare deployment of my own custom DNS over HTTP(s) server.
 - Cloudflare workers
 - Cloudflare KV
 - SvelteKit
+
+
+# Hi CF Team
+
+In case you found my `User-Agent` header in your logs and are curious, please feel free to [contact me](https://github.com/purplelemons-dev#contact)!
